@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
+import json
 
 from sqlmodel import Field, Relationship, SQLModel, create_engine, Enum
 
@@ -16,12 +17,16 @@ class Satisfaction(SQLModel, table=True):
 
     deviceId: str = Field(foreign_key="device.deviceId")
     device: Device = Relationship(back_populates="satisfactions")
+    def toJSON(self):
+        return {
+            "satisfaction": self.satisfaction,
+        }
 
 
-
-db_url = 'mysql+pymysql://frans-mbp:Plesken2@localhost:3306/project3'
+db_url = 'mysql+pymysql://root:mypass@localhost:3306/db'
 
 engine = create_engine(db_url, echo=True)
+
 
 
 def create_db_and_tables():
