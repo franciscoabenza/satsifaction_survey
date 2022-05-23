@@ -1,5 +1,4 @@
 
-{% plotly.hist_frame %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -24,7 +23,6 @@
         <li class="list-group-item hover">
             <a href={{'devices/'+device.deviceId}} ><h3>{{ device.deviceId }}</h3></a>
           <p>location: {{ device.location }}</p>
-          <p>{{plt.hist(satisfactions)}}</p>
           {% for satisfaction in satisfactions %}
           <p>satisfaction: {{ satisfaction.satisfaction }}</p>
           
@@ -34,9 +32,19 @@
         {% endfor %}
       </ul>
     </div>
+    <div id="chart"></div>
     <script type="text/javascript">
-      var graphs = {{graphJSON | safe}};
-      Plotly.plot('chart',satisfactions,{});        
+      var satisfactions = {{ satisfactions | safe }};
+      // these xAxis values represent the 3 different satisfaction values 
+      const xAxis = ['1', '2', '3'];
+      var data = [{
+        x: xAxis,
+        y: xAxis.map(x => satisfactions.filter(s => s.satisfaction === x).length),
+        type: 'bar'
+        }
+      ];
+      // var graphs = {{graphJSON | safe}};
+      Plotly.plot('chart', data,{});        
   </script>
   </body>
 </html>

@@ -6,6 +6,10 @@ import sqlmodel
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import plotly.express as px
+
+from datetime import datetime
+import json
 
 
 
@@ -18,6 +22,10 @@ app = FastAPI()
 def on_startup():
     global engine
     engine = create_db_and_tables()
+    now = datetime.now()
+#
+
+
 
 
 templates = Jinja2Templates(directory="templates")
@@ -30,6 +38,7 @@ def getDevices():
 
 # Website Section
 
+
 @app.get("/")
 def read_root(request: Request):
     devices = getDevices()
@@ -40,20 +49,9 @@ def read_root(request: Request):
 @app.get("/devices/{deviceId}")
 def read_root(request: Request, deviceId):
     devices = getDevices()
-    satisfaction = getSatisfactions(deviceId)
+    satisfactions = [s.toJSON() for s in getSatisfactions(deviceId) ]
+    return templates.TemplateResponse("device.html", {"request": request, "devices": devices, "satisfactions": satisfactions})
 
-    
-    ig = make_subplots(specs=[[{"secondary_y": True}]])
-
-    fig.add_trace(go.Scatter(x=df['ts'], y=df['temperature'], name='Temperature', line=dict(color='Crimson')), secondary_y=False)
-    fig.add_trace(go.Scatter(x=df['ts'], y=df['humidity'], name='Humidity', line=dict(color='CornflowerBlue')), secondary_y=False)
-    fig.add_trace(go.Scatter(x=df['ts'], y=df['lightIntensity'], name='Light Intensity', line=dict(color='Burlywood')), secondary_y=True)
-
-    fig.update_layout(title_text="The Holy Trifecta of Data") #Can add a ton of parameters here; height, width etc
-
-
-    print(satisfaction, "🤪")
-    return templates.TemplateResponse("device.html", {"request": request, "devices": devices, "satisfactions": satisfaction})
 
 """@app.get("/devices/{deviceId}/satisfactions")
 def read_root(request: Request):
@@ -61,6 +59,7 @@ def read_root(request: Request):
     return templates.TemplateResponse("satisfactions.html", {"request": request, "satisfactions": satisfactions})"""
 
 # API section
+
 
 @app.get("/devices")
 def listDevices():
@@ -80,8 +79,6 @@ def getSatisfactions(deviceId: str):
         return satisfactions
 
 
-        
-
 @app.post("/devices")
 def createDevice(device: Device):
     with Session(engine) as session:
@@ -96,4 +93,3 @@ def createSatisfaction(satisfaction: Satisfaction):
         session.add(satisfaction)
         session.commit()
         return satisfaction
-    
