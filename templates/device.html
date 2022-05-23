@@ -1,6 +1,10 @@
+
+{% plotly.hist_frame %}
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script></head>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -15,14 +19,24 @@
       <h1>Device details</h1>
       <ul class="list-group">
         {% for device in devices %}
+      
 
         <li class="list-group-item hover">
             <a href={{'devices/'+device.deviceId}} ><h3>{{ device.deviceId }}</h3></a>
           <p>location: {{ device.location }}</p>
+          <p>{{plt.hist(satisfactions)}}</p>
+          {% for satisfaction in satisfactions %}
+          <p>satisfaction: {{ satisfaction.satisfaction }}</p>
+          
+          {% endfor %}
         </li>
 
         {% endfor %}
       </ul>
     </div>
+    <script type="text/javascript">
+      var graphs = {{graphJSON | safe}};
+      Plotly.plot('chart',satisfactions,{});        
+  </script>
   </body>
 </html>

@@ -18,6 +18,7 @@ class Satisfaction(SQLModel, table=True):
     device: Device = Relationship(back_populates="satisfactions")
 
 
+
 db_url = 'mysql+pymysql://frans-mbp:Plesken2@localhost:3306/project3'
 
 engine = create_engine(db_url, echo=True)
