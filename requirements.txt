@@ -5,5 +5,3 @@ sqlmodel
 fastapi
 uvicorn #server
 pymysql
-matplotlib
-plotly
