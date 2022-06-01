@@ -15,10 +15,11 @@
       <h1>List of Devices</h1>
       <ul class="list-group">
         {% for device in devices %}
+      
 
         <li class="list-group-item hover">
             <a href={{'devices/'+device.deviceId}} ><h3>{{ device.deviceId }}</h3></a>
-          <p>location: {{ device.location }}</p>
+          <p>location: {{ device.location}}</p>
         </li>
 
         {% endfor %}

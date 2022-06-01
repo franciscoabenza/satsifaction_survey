@@ -12,7 +12,7 @@ def post_satisfaction():
     myobj = {
         "satisfaction": survey,
         "deviceId": device_id,
-        "insertedAt": time
+        "insertedAt": time,
         }
     print(myobj)
     x = requests.post(url, data = json.dumps(myobj))

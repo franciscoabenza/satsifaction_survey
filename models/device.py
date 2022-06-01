@@ -15,8 +15,8 @@ class Satisfaction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     satisfaction: str
     insertedAt: datetime
-    location: str = None
-    category: Optional[str] = None
+    #location: str = None
+    #category: Optional[str] = None
     deviceId: str = Field(foreign_key="device.deviceId")
     device: Device = Relationship(back_populates="satisfactions")
     def toJSON(self):
