@@ -40,6 +40,11 @@ def read_root(request: Request):
     devices = getDevices()
     # get index.html / pass devices to it and run the dynamic python code inside the html / and return the html to the client
     return templates.TemplateResponse("index.html", {"request": request, "devices": devices})
+@app.get("/test")
+def read_root(request: Request):
+    devices = getDevices()
+    # get index.html / pass devices to it and run the dynamic python code inside the html / and return the html to the client
+    return templates.TemplateResponse("test.html", {"request": request, "devices": devices})
 
 
 @app.get("/devices/{deviceId}")
