@@ -3,10 +3,7 @@ from requests import request
 from sqlmodel import Session, select
 from fastapi.templating import Jinja2Templates
 import sqlmodel
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-import plotly.express as px
+
 
 from datetime import datetime
 import json
@@ -24,7 +21,6 @@ def on_startup():
     engine = create_db_and_tables()
     now = datetime.now()
 #
-
 
 
 
@@ -52,12 +48,6 @@ def read_root(request: Request, deviceId):
     satisfactions = [s.toJSON() for s in getSatisfactions(deviceId) ]
     return templates.TemplateResponse("device.html", {"request": request, "devices": devices, "satisfactions": satisfactions})
 
-
-"""@app.get("/devices/{deviceId}/satisfactions")
-def read_root(request: Request):
-    satisfactions = getSatisfactions(devices.deviceId)
-    return templates.TemplateResponse("satisfactions.html", {"request": request, "satisfactions": satisfactions})"""
-
 # API section
 
 
@@ -68,7 +58,6 @@ def listDevices():
 
 @app.get("/devices/{deviceId}/satisfactions")
 def getSatisfactions(deviceId: str):
-    print(deviceId)
     with Session(engine) as session:
         device = session.exec(select(Device).where(
             Device.deviceId == deviceId)).first()
@@ -89,7 +78,15 @@ def createDevice(device: Device):
 
 @app.post("/satisfactions")
 def createSatisfaction(satisfaction: Satisfaction):
+    #satisfaction.category = openAI_getcategory(satisfaction.comment)
     with Session(engine) as session:
         session.add(satisfaction)
         session.commit()
         return satisfaction
+
+@app.patch("/devices/{deviceId}")
+def updateDevice(device: Device):
+    with Session(engine) as session:
+        session.add(device)
+        session.commit()
+        return device

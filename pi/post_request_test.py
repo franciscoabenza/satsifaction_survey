@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 import json
 
-def get_satisfaction():
+def post_satisfaction():
     url = "http://localhost:8000/satisfactions"
     survey = input('insert your satisfaction level: ')
     time = datetime.now().isoformat()
@@ -17,4 +17,5 @@ def get_satisfaction():
     print(myobj)
     x = requests.post(url, data = json.dumps(myobj))
 
-get_satisfaction()
+
+post_satisfaction()

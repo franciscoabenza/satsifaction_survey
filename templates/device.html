@@ -16,35 +16,20 @@
   <body>
     <div class="container mt-5">
       <h1>Device details</h1>
-      <ul class="list-group">
-        {% for device in devices %}
       
-
-        <li class="list-group-item hover">
-            <a href={{'devices/'+device.deviceId}} ><h3>{{ device.deviceId }}</h3></a>
-          <p>location: {{ device.location }}</p>
-          {% for satisfaction in satisfactions %}
-          <p>satisfaction: {{ satisfaction.satisfaction }}</p>
-          
-          {% endfor %}
-        </li>
-
-        {% endfor %}
-      </ul>
     </div>
     <div id="chart"></div>
     <script type="text/javascript">
       var satisfactions = {{ satisfactions | safe }};
       // these xAxis values represent the 3 different satisfaction values 
-      const xAxis = ['1', '2', '3'];
+      const xAxis = ['happy', 'neutral', 'sad'];
       var data = [{
         x: xAxis,
         y: xAxis.map(x => satisfactions.filter(s => s.satisfaction === x).length),
         type: 'bar'
         }
       ];
-      // var graphs = {{graphJSON | safe}};
-      Plotly.plot('chart', data,{});        
+      Plotly.plot('chart', data);
   </script>
   </body>
 </html>
