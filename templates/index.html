@@ -18,12 +18,19 @@
       
 
         <li class="list-group-item hover">
-            <a href={{'devices/'+device.deviceId}} ><h3>{{ device.deviceId }}</h3></a>
+            <a href={{'devices/'+device.deviceId}} ><h3>{{device.deviceId}}</h3></a>
+           <form method="post" action='devices/{{device.deviceId}}'>
+              <input name="location" />
+              <input type="submit" />
+           </form>
           <p>location: {{ device.location}}</p>
         </li>
 
         {% endfor %}
       </ul>
     </div>
+    <script>
+
+    </script>
   </body>
 </html>

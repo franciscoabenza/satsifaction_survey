@@ -15,7 +15,7 @@ class Satisfaction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     satisfaction: str
     insertedAt: datetime
-    #location: str = None
+    location: Optional[str]
     #category: Optional[str] = None
     deviceId: str = Field(foreign_key="device.deviceId")
     device: Device = Relationship(back_populates="satisfactions")
@@ -23,16 +23,13 @@ class Satisfaction(SQLModel, table=True):
         return {
             "satisfaction": self.satisfaction,
         }
-class UpdateLocation(SQLModel, table=False):
-    deviceId: str = Field(primary_key=True)
-    location: Optional[str] = None
+
 
 
 db_url = 'mysql+pymysql://frans-mbp:Plesken2@localhost:3306/project3'
 
-engine = create_engine(db_url, echo=True)
-
-
+# connects to data base and create tables from the classes
 def create_db_and_tables():
+    engine = create_engine(db_url, echo=True)
     SQLModel.metadata.create_all(engine)
     return engine

@@ -8,14 +8,13 @@ def post_satisfaction():
     survey = input('insert your satisfaction level: ')
     time = datetime.now().isoformat()
     device_id = get_mac_address()
-    
+    location = input("insert location: ")
     myobj = {
         "satisfaction": survey,
         "deviceId": device_id,
         "insertedAt": time,
+        "location": location
         }
     print(myobj)
     x = requests.post(url, data = json.dumps(myobj))
-
-
 post_satisfaction()

@@ -5,3 +5,4 @@ sqlmodel
 fastapi
 uvicorn #server
 pymysql
+python-multipart
