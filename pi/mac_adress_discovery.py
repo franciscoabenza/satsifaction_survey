@@ -3,8 +3,8 @@ import requests
 import json
 
 try:
-    #test_device = "2f:8b:95:b4:b8:77"
-    eth_mac = get_mac_address()
+    test_device = "2f:8b:11:b4:b8:00"
+    eth_mac = test_device
     url = 'http://localhost:8000/devices'
     location = "KITCHEN"
     device_mac = {'deviceId' : eth_mac, 'location': location}
@@ -13,8 +13,9 @@ try:
     
 except:
     #we will print the error
-    print("it maybe that")
+    print("it may be that")
     print("the device is already created: ", eth_mac)
+
 
 
 # def getUser(): 

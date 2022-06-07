@@ -7,16 +7,16 @@ from sqlmodel import Field, Relationship, SQLModel, create_engine, Enum
 class Device(SQLModel, table=True):
     deviceId: str = Field(primary_key=True)
     location: Optional[str] = None
-
-    satisfactions: List["Satisfaction"] = Relationship(back_populates="device")
+    satisfactions: List["Satisfaction"] = Relationship(back_populates="device") #back_populates is a property of the relationship
     
 
 class Satisfaction(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     satisfaction: str
     insertedAt: datetime
-    location: Optional[str]
-    #category: Optional[str] = None
+    location: Optional[str] = None
+    category: Optional[str] = None
+    comment: Optional[str] = None
     deviceId: str = Field(foreign_key="device.deviceId")
     device: Device = Relationship(back_populates="satisfactions")
     def toJSON(self):
@@ -33,3 +33,4 @@ def create_db_and_tables():
     engine = create_engine(db_url, echo=True)
     SQLModel.metadata.create_all(engine)
     return engine
+
