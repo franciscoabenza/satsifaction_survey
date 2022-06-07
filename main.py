@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse
 from requests import request
 from sqlmodel import Session, select
 from fastapi.templating import Jinja2Templates
+import openAI
 import sqlmodel
 
 
@@ -31,6 +32,12 @@ def getDevices():
         devices = session.exec(select(Device)).all()
         return devices
 
+def getDeviceById(deviceId):
+    with Session(engine) as session:
+        device = session.exec(select(Device).where(
+            Device.deviceId == deviceId)).first()
+        return device
+
 # Website Section
 
 @app.get("/")
@@ -39,13 +46,12 @@ def read_root(request: Request):
     # get index.html / pass devices to it and run the dynamic python code inside the html / and return the html to the client
     return templates.TemplateResponse("index.html", {"request": request, "devices": devices}) #ninja needs access to the request
 
-
-
 @app.get("/devices/{deviceId}")
 def read_root(request: Request, deviceId):
     devices = getDevices()
     satisfactions = [s.toJSON() for s in getSatisfactions(deviceId) ]
     return templates.TemplateResponse("device.html", {"request": request, "devices": devices, "satisfactions": satisfactions})
+
 
 # API section
 
@@ -53,6 +59,14 @@ def read_root(request: Request, deviceId):
 @app.get("/devices")
 def listDevices():
     return getDevices()
+
+
+@app.get("/devices/{deviceId}/location")
+def getLocation(deviceId: str):
+    with Session(engine) as session:
+        device = session.exec(select(Device).where(
+            Device.deviceId == deviceId)).first()
+        return device.location
 
 
 @app.get("/devices/{deviceId}/satisfactions")
@@ -75,15 +89,14 @@ def createDevice(device: Device):
         return device
 
 
-@app.post("/satisfactions")
+@app.post("/satisfactions") #for the python sending json
 def createSatisfaction(satisfaction: Satisfaction):
-    #satisfaction.category = openAI_getcategory(satisfaction.comment)
     with Session(engine) as session:
         session.add(satisfaction)
         session.commit()
         return satisfaction
 
-@app.post("/devices/{deviceId}", response_class=RedirectResponse, status_code=302)
+@app.post("/devices/{deviceId}", response_class=RedirectResponse, status_code=302) #redirect to "/" page
 def updateDevice(deviceId: str, location: str = Form()):
     print(location, deviceId)
     with Session(engine) as session:
@@ -93,31 +106,28 @@ def updateDevice(deviceId: str, location: str = Form()):
         session.commit()
         return "/"
 
-        
+#website graphical interface for collecting surveys (survey.html)
+@app.get("/devices/{deviceId}/survey")
+def read_root(request: Request, deviceId):
+    device = getDeviceById(deviceId)
+    satisfactions = getSatisfactions(deviceId)
+    return templates.TemplateResponse("survey.html", {"request": request, "device": device, "satisfactions": satisfactions})
+
+
+@app.post("/satisfactions/{deviceId}", response_class=RedirectResponse, status_code=302)
+def createSatisfaction(deviceId: str, satisfaction: str = Form(), time: str = Form(), comment = Form(default="")):
+    
+    category = openAI.get_category(satisfaction.comment) # here
+
+    satisfactionRecord = Satisfaction(deviceId=deviceId, satisfaction= satisfaction, insertedAt=time, comment=comment, category=category)
+    with Session(engine) as session:
+        session.add(satisfactionRecord)
+        session.commit()
+
+    url = "/devices/{}/survey".format(deviceId)
+    return url
+    #satisfaction.category = openAI_getcategory(satisfaction.comment)
     # with Session(engine) as session:
-    #     session.add(device)
+    #     session.add(satisfaction)
     #     session.commit()
-    #     return device
-
-
-
-
-
-# file = open('file_path', 'w')
-# file.write('hello world !')
-# file.close()
-  
-# # 2) without using with statement
-# file = open('file_path', 'w')
-# try:
-#     file.write('hello world')
-# finally:
-#     file.close()
-
-
-# # second code
-# with open('file_path', 'w') as file:
-#     file.write('hello world !')
-#     print("before", file)
-
-#  print("after", file)
+    #     return satisfaction
