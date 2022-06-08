@@ -116,8 +116,8 @@ def read_root(request: Request, deviceId):
 
 @app.post("/satisfactions/{deviceId}", response_class=RedirectResponse, status_code=302)
 def createSatisfaction(deviceId: str, satisfaction: str = Form(), time: str = Form(), comment = Form(default="")):
-    
-    category = openAI.get_category(satisfaction.comment) # here
+   
+    category = openAI.get_category(comment) # here
 
     satisfactionRecord = Satisfaction(deviceId=deviceId, satisfaction= satisfaction, insertedAt=time, comment=comment, category=category)
     with Session(engine) as session:
