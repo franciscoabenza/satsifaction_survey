@@ -1,14 +1,14 @@
 import os
 import openai
 
-openai.api_key = "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"
+openai.api_key = "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"
 
 
 def get_category(comment):
   restart_sequence = "\n"
   response = openai.Completion.create(
     engine="text-davinci-002",
-    prompt="The following is a feedback given by a costumer:\n\n\"{}\"\n\nThe possible categories are: [cleanness], [crowded], [design flaw], [staff], [sound]\n\nthe feedback would belong to the category:".format(comment),
+    prompt="The following is a feedback given by a costumer:\n\n\"{}\"\n\nThe only possible categories are: [cleanness], [crowded], [delayed], [staff], [sound], [food]\n\nthe feedback would belong to the category:".format(comment),
     temperature=0,
     max_tokens=6,
     top_p=1,
