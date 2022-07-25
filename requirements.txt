@@ -6,3 +6,4 @@ fastapi
 uvicorn #server
 pymysql
 python-multipart
+pip install fastapi-mqtt
