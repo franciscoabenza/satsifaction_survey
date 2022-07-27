@@ -7,3 +7,4 @@ uvicorn #server
 pymysql
 python-multipart
 fastapi-mqtt
+Jinja2
