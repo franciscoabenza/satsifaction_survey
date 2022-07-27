@@ -31,7 +31,7 @@ Or log in as root:
 
 `sudo mysql -u root`
 
-run: `uvicorn main:app --reload`
+run: `uvicorn main:app --host 0.0.0.0 --port 8000 --reload`
 
 Enter the URL:
-http://localhost:8000/
+http://raspberrypiaidbroker:8000/
