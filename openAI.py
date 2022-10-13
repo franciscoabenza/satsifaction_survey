@@ -1,7 +1,7 @@
 import os
 import openai
 
-openai.api_key = "create your own key"
+openai.api_key = "create your own key please"
 
 
 def get_category(comment):
