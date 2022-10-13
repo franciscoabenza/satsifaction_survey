@@ -1,6 +1,6 @@
 const int HTTP_PORT = 80;
 const String HTTP_METHOD = "GET";      // or "POST"
-const char HOST_NAME[] = "https://a704-84-238-41-26.eu.ngrok.io"; // hostname of web server:
+const char HOST_NAME[] = "https://a809-84-238-41-26.eu.ngrok.io"; // hostname of web server:
 const String PATH_NAME = "";
 
 
